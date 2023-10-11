@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/wyattfurois/Documents/projects/minesweeper/src",
+      "program": "/Users/wyattfurois/Documents/projects/minesweeper/bin/build_osx"
+    }
+  ]
+}

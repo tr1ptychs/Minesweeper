@@ -1,10 +1,10 @@
 #include "Tile.h"
 #include "raylib.h"
 #include "raymath.h"
-#include <numeric>
 
 // construct me 
-Tile::Tile(int xCoordinate, int yCoordinate) : xCoordinate(xCoordinate), yCoordinate(yCoordinate){};
+Tile::Tile(int xCoordinate, int yCoordinate, bool hasBomb) : xCoordinate(xCoordinate), 
+        yCoordinate(yCoordinate), hasBomb(hasBomb){};
 
 // destructor
 Tile::~Tile(){}
@@ -23,23 +23,26 @@ bool Tile::reveal(){
     return false;
 }
 
-// insert a bomb into the tile
-void Tile::setBomb(){
-    this->hasBomb = true;
-    return;
+bool Tile::tileHasBomb() {
+    return this->hasBomb;
 }
 
 // draw the tile on the screen
-void Tile::draw(){
+void Tile::draw() {
     if (isRevealed) {
-        DrawRectangle(this->xCoordinate, this->yCoordinate,
-                      48, 48, WHITE);
-    } else if (isHoverClicked) {
-        DrawRectangle(this->xCoordinate, this->yCoordinate, 
-                      48, 48, DARKGRAY);
+        if (hasBomb) {
+            DrawRectangle(this->xCoordinate, this->yCoordinate, 23, 23, BLACK);
+        } else {
+            DrawRectangle(this->xCoordinate, this->yCoordinate, 23, 23, this->getColor());
+        }
     } else {
-        DrawRectangle(this->xCoordinate, this->yCoordinate, 
-                      48, 48, GRAY);
+        DrawRectangle(this->xCoordinate, this->yCoordinate, 23, 23, GRAY);
     }
     return;
 }
+
+void Tile::setColor(Color color) {
+    this->color = color;
+}
+
+Color Tile::getColor() { return this->color; }

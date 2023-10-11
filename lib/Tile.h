@@ -2,10 +2,11 @@
 #define TILE_H_
 
 
+#include "raylib.h"
 class Tile {
     public:
         // constructor, pass in coordinates
-        Tile(int xCoordinate, int yCoordinate);
+        Tile(int xCoordinate, int yCoordinate, bool hasBomb);
 
         // destructor
         ~Tile();
@@ -16,18 +17,24 @@ class Tile {
         // reveal the tile.
         bool reveal();
         
-        // insert a bomb into the tile
-        void setBomb();
-        
         // draw the tile on the screen
         void draw();
 
+        // check to see if tile has a bomb.
+        bool tileHasBomb();
+
+        // set the color of the tile
+        void setColor(Color color);
+
+        // get the color of the tile
+        Color getColor();
+
     private:
-        bool hasBomb;
+        const bool hasBomb;
         bool isRevealed;
         bool isHoverClicked;
         bool hasFlag;
-        int hintNumber;
+        Color color;
         const int xCoordinate;
         const int yCoordinate;
 };
