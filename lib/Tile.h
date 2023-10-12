@@ -16,6 +16,9 @@ class Tile {
 
         // reveal the tile.
         bool reveal();
+
+        // place a flag onto the tile or remove flag from tile
+        void flag();
         
         // draw the tile on the screen
         void draw();
@@ -28,12 +31,22 @@ class Tile {
 
         // get the color of the tile
         Color getColor();
+        
+        // set tile to be white 
+        void setTileIsWhite();
 
+        // return true if square is white
+        bool tileIsWhite();
+
+        // return if the tile is revealed
+        bool tileIsRevealed();
+    
+        bool hasFlag;
     private:
         const bool hasBomb;
         bool isRevealed;
         bool isHoverClicked;
-        bool hasFlag;
+        bool isWhite;
         Color color;
         const int xCoordinate;
         const int yCoordinate;

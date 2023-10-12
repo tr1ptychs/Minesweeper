@@ -8,10 +8,9 @@
 
 void updateFrame(Minefield* field);
 
-
 int main(void) {
-    InitWindow(1000, 400, "Minesweeper");
-    Minefield* field = new Minefield("hard");
+    InitWindow(1000, 400, "Minimal Minesweeper");
+    Minefield* field = new Minefield("easy");
 
     while (!WindowShouldClose()) {
         updateFrame(field);
@@ -28,15 +27,25 @@ int main(void) {
 void updateFrame(Minefield* field){
     BeginDrawing();
     ClearBackground(BLACK);
-
-    // TODO: implement "hover" click
-    
-    // if cursor is out of the frame, program will crash.
-    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && !(GetMouseX() < 0 
-            || GetMouseX() > 1000 || GetMouseY() < 0 || GetMouseY() > 400)) {
-        field->click(GetMouseX(), GetMouseY());
-        
+    if (!field->checkLose() && !field->checkWin()) {
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+            field->click(GetMouseX(), GetMouseY());
+        }
+        if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
+            field->flag(GetMouseX(), GetMouseY());
+        }
+    } else if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+        field->reinit();
     }
+
+    if (IsKeyReleased(KEY_ONE)) {
+        field->init("easy");
+    } else if (IsKeyReleased(KEY_TWO)) {
+        field->init("medium");
+    } else if (IsKeyReleased(KEY_THREE)) {
+        field->init("hard");
+    }
+
     field->draw();
 
     EndDrawing();
