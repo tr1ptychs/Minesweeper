@@ -116,20 +116,21 @@ void Minefield::flag(int x, int y) {
 }
 
 void Minefield::click(int x, int y) {
+    Tile* currentTile;
     int xCoord = floor(x/25);
     int yCoord = floor(y/25);
-    if (!(xCoord < 0 || xCoord >= this->width || yCoord < 0 || yCoord >= this->height)){
-        if (!this->tileMap.at(yCoord).at(xCoord)->tileIsRevealed()){
-            this->tileMap.at(yCoord).at(xCoord)->reveal();
+
+    if (coordinateIsInBounds(xCoord, yCoord)){
+        currentTile = this->tileMap.at(yCoord).at(xCoord);
+
+        if (!currentTile->tileIsRevealed()){
+            currentTile->reveal();
             
             // if tile is white reveal neighbors.
-            if (this->tileMap.at(yCoord).at(xCoord)->tileIsWhite() 
-                    && !this->tileMap.at(yCoord).at(xCoord)->tileHasBomb()) {
+            if (currentTile->tileIsWhite() && !currentTile->tileHasBomb()) {
                 for (int i = -1; i < 2; i++) {
                     for (int j = -1; j < 2; j++) {
-                        if (!(i == 0 && j == 0)) {
-                            this->click(x + 25 * i, y + 25 * j);
-                        }
+                        this->click(25 * (xCoord + i), 25 * (yCoord + j));
                     }
                 }
             }
@@ -140,9 +141,13 @@ void Minefield::click(int x, int y) {
 
 
 bool Minefield::checkLose() {
+    Tile* currentTile;
+
     for (int y = 0; y < this->height; y++) {
         for (int x = 0; x < this->width; x++) {
-            if (this->tileMap.at(y).at(x)->tileHasBomb() && this->tileMap.at(y).at(x)->tileIsRevealed()) {
+            currentTile = this->tileMap.at(y).at(x);
+
+            if (currentTile->tileHasBomb() && currentTile->tileIsRevealed()) {
                 return true;
             }
         }
@@ -151,12 +156,20 @@ bool Minefield::checkLose() {
 }
 
 bool Minefield::checkWin() {
+    Tile* currentTile;
+
     for (int y = 0; y < this->height; y++) {
         for (int x = 0; x < this->width; x++) {
-            if (!this->tileMap.at(y).at(x)->tileHasBomb() && !this->tileMap.at(y).at(x)->tileIsRevealed()) {
+            currentTile = this->tileMap.at(y).at(x);
+
+            if (!currentTile->tileHasBomb() && !currentTile->tileIsRevealed()) {
                 return false;
             }
         }
     }
     return true;
+}
+
+bool Minefield::coordinateIsInBounds(int x, int y) {
+    return x >= 0 && x < this->width && y >= 0 && y < this->height;
 }

@@ -44,6 +44,9 @@ void Tile::draw() {
         }
     } else {
         DrawRectangle(this->xCoordinate, this->yCoordinate, 23, 23, GRAY);
+        if (hasFlag) {
+            DrawCircle(this->xCoordinate + 12, this->yCoordinate + 12, 9.f, BLACK);
+        }
     }
     return;
 }

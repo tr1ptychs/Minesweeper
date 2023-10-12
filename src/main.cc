@@ -27,6 +27,8 @@ int main(void) {
 void updateFrame(Minefield* field){
     BeginDrawing();
     ClearBackground(BLACK);
+
+    // reveal and flag
     if (!field->checkLose() && !field->checkWin()) {
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             field->click(GetMouseX(), GetMouseY());
@@ -38,6 +40,7 @@ void updateFrame(Minefield* field){
         field->reinit();
     }
 
+    // new game/change game
     if (IsKeyReleased(KEY_ONE)) {
         field->init("easy");
     } else if (IsKeyReleased(KEY_TWO)) {

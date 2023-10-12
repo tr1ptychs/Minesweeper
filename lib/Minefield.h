@@ -36,6 +36,8 @@ class Minefield {
         int numberOfBombs;
         std::string difficulty;
         std::vector<std::vector<Tile*> > tileMap;
+
+        bool coordinateIsInBounds(int x, int y);
 };
 
 #endif
