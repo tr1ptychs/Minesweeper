@@ -21,6 +21,9 @@ class Minefield {
         // click on the minefield
         void click(int x, int y);
 
+        // chord on the minefield
+        void chord(int x, int y);
+
         // toggle a flag on the tile
         void flag(int x, int y);
 
@@ -38,6 +41,8 @@ class Minefield {
         std::vector<std::vector<Tile*> > tileMap;
 
         bool coordinateIsInBounds(int x, int y);
+        Tile* getTileAtCoordinates(int x, int y);
+
 };
 
 #endif

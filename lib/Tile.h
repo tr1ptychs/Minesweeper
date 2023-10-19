@@ -31,6 +31,12 @@ class Tile {
 
         // get the color of the tile
         Color getColor();
+
+        // set the hint number
+        void setNumber(int hintNumber);
+
+        // get the hint number
+        int getNumber();
         
         // set tile to be white 
         void setTileIsWhite();
@@ -47,6 +53,7 @@ class Tile {
         bool isRevealed;
         bool isHoverClicked;
         bool isWhite;
+        int number;
         Color color;
         const int xCoordinate;
         const int yCoordinate;

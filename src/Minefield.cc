@@ -44,35 +44,33 @@ void Minefield::init(std::string difficulty) {
     // bomb placement engine
     std::default_random_engine generator(std::random_device{}()); 
     std::uniform_int_distribution<int> distribution(1, floor((this->width * this->height) 
-                                                                / this->numberOfBombs));
+                                                                / this->numberOfBombs) + 1);
     bool hasBomb;
     int count = 0;
     bool done = false;
-    std::cout << this->width << std::endl;
+    
     // init bombs
-    //while (count < this->numberOfBombs) {
-        for (int y = 0; y < this->height; y++) {
-            for (int x = 0; x < this->width; x++) {
-                if (!done) {
-                    hasBomb = distribution(generator) == 1;
-                    if (hasBomb) count++;
-                    if (count == this->numberOfBombs) done = true;
-                } else { hasBomb = false; }
+    for (int y = 0; y < this->height; y++) {
+        for (int x = 0; x < this->width; x++) {
+            if (!done) {
+                hasBomb = distribution(generator) == 1;
+                if (hasBomb) count++;
+                if (count == this->numberOfBombs) done = true;
+            } else { hasBomb = false; }
 
                 this->tileMap.at(y).at(x) = new Tile(25 * x + 1, 25 * y + 1, hasBomb);
             }
-        }
-        std::cout << count << std::endl;
-    //}
+    }
     if (count != numberOfBombs) {
         init(difficulty);
         return;
     }
     // init colors 
-    Color colors[] = {WHITE, BLUE, GREEN, RED, DARKBLUE, MAROON, (Color) {0, 128, 128, 255}, VIOLET, DARKGRAY};
-
+    Color colors[] = {RAYWHITE, BLUE, GREEN, RED, DARKBLUE, MAROON, (Color) {0, 128, 128, 255}, VIOLET, DARKGRAY};
     int xCoord;
     int yCoord;
+    
+
     for (int y = 0; y < this->height; y++) {
         for (int x = 0; x < this->width; x++) {
             count = 0;
@@ -82,7 +80,7 @@ void Minefield::init(std::string difficulty) {
                     for (int j = -1; j < 2; j++) {
                         xCoord = x + j;
                         yCoord = y + i;
-                        if (xCoord < this->width && xCoord >= 0 && yCoord < this->height && yCoord >= 0) {
+                        if (coordinateIsInBounds(xCoord, yCoord)) {
                             if (this->tileMap.at(yCoord).at(xCoord)->tileHasBomb()) {
                                 count++;
                             }
@@ -91,6 +89,7 @@ void Minefield::init(std::string difficulty) {
                 }        
             }
             this->tileMap.at(y).at(x)->setColor(colors[count]);
+            this->tileMap.at(y).at(x)->setNumber(count);
             if (count == 0) tileMap.at(y).at(x)->setTileIsWhite();
         }
     }
@@ -101,11 +100,8 @@ void Minefield::reinit() {
 }
 
 void Minefield::draw() {
-    // std::cout << "x: 5, y: 8" << std::endl;
-    // std::cout << this->tileMap.at(5).at(8) << std::endl;
     for (int y = 0; y < this->height; y++) {
         for (int x = 0; x < this->width; x++) {
-            //std::cout << "x: " << x << std::endl << "y: " << y << std::endl;
             this->tileMap.at(y).at(x)->draw();
         }
     }
@@ -116,28 +112,52 @@ void Minefield::flag(int x, int y) {
 }
 
 void Minefield::click(int x, int y) {
-    Tile* currentTile;
-    int xCoord = floor(x/25);
-    int yCoord = floor(y/25);
+    x = floor(x/25);
+    y = floor(y/25);
 
-    if (coordinateIsInBounds(xCoord, yCoord)){
-        currentTile = this->tileMap.at(yCoord).at(xCoord);
+    Tile* currentTile = getTileAtCoordinates(x, y);
+    if (currentTile == nullptr) return;
 
-        if (!currentTile->tileIsRevealed()){
-            currentTile->reveal();
+    if (currentTile->tileIsRevealed()) return; 
+    currentTile->reveal();
             
-            // if tile is white reveal neighbors.
-            if (currentTile->tileIsWhite() && !currentTile->tileHasBomb()) {
-                for (int i = -1; i < 2; i++) {
-                    for (int j = -1; j < 2; j++) {
-                        this->click(25 * (xCoord + i), 25 * (yCoord + j));
-                    }
-                }
-            }
+    // if tile is white reveal neighbors.
+    if (!currentTile->tileIsWhite() || currentTile->tileHasBomb()) return;
+        
+    for (int i = -1; i < 2; i++) {
+        for (int j = -1; j < 2; j++) {
+            this->click(25 * (x + i), 25 * (y + j));
         }
     }
 }
 
+void Minefield::chord(int x, int y) {
+    x = floor(x/25);
+    y = floor(y/25);
+
+    Tile* currentTile = getTileAtCoordinates(x, y);
+    if (currentTile->tileHasBomb()) return;
+    Tile* countTile;
+    if (currentTile == nullptr) return;
+    int count = 0;
+
+    for (int i = -1; i < 2; i++) {
+        for (int j = -1; j < 2; j++) {
+            countTile = getTileAtCoordinates(x + i, y + j);
+            if (countTile != nullptr && countTile->hasFlag) {
+                count++;
+            }
+        }
+    }
+   
+    if (count == currentTile->getNumber()) {
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                this->click(25 * (x + i), 25 * (y + j));
+            }
+        }   
+    }
+}
 
 
 bool Minefield::checkLose() {
@@ -172,4 +192,10 @@ bool Minefield::checkWin() {
 
 bool Minefield::coordinateIsInBounds(int x, int y) {
     return x >= 0 && x < this->width && y >= 0 && y < this->height;
+}
+
+Tile* Minefield::getTileAtCoordinates(int x, int y) {
+    if (!coordinateIsInBounds(x, y)) return nullptr;
+    
+    return this->tileMap.at(y).at(x);
 }

@@ -55,6 +55,10 @@ void Tile::setColor(Color color) {
     this->color = color;
 }
 
+void Tile::setNumber(int hintNumber) { this->number = hintNumber; }
+
+int Tile::getNumber() { return this->number; }
+
 Color Tile::getColor() { return this->color; }
 
 bool Tile::tileIsWhite() { return this->isWhite; }

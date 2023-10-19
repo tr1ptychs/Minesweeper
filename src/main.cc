@@ -36,10 +36,13 @@ void updateFrame(Minefield* field){
         if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
             field->flag(GetMouseX(), GetMouseY());
         }
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+            field->chord(GetMouseX(), GetMouseY());
+        }
     } else if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
         field->reinit();
     }
-
+    
     // new game/change game
     if (IsKeyReleased(KEY_ONE)) {
         field->init("easy");
