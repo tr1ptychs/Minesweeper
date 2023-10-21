@@ -1,6 +1,6 @@
 # Minimal-Minesweeper
 
-Minesweeper clone with a minimal artstyle made as a fun little project while I wait for more programming assignments in school.
+Minesweeper clone with a minimal art style made as a fun little project while I wait for more programming assignments in school.
 
 ## how to run
 
@@ -10,11 +10,11 @@ To play, use "make" to compile and then "./bin/build_osx" in the main folder to 
 
 ## how to play
 
-Lress 1 on keyboard for a new beginner game, 2 for a new intermediate game, or 3 for a new expert game at any time.
+Press 1 on keyboard for a new beginner game, 2 for a new intermediate game, or 3 for a new expert game at any time.
 
 Left click will reveal the tile you're hovering over.
 
-Colors represent hint colors in original minesweeper. Blue is 1, green is 2, red 3, dark blue 4, etc.
+Colors represent hint colors in the original minesweeper. Blue is 1, green is 2, red 3, dark blue 4, etc.
 
 Right click to place a "flag" (circle).
 
