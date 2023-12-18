@@ -9,5 +9,8 @@ OSX_OUT = -o "bin/build_osx"
 
 CFILES = src/*.cc
 
-build_osx:
+build:
 	$(COMPILER) $(CFILES) $(SOURCE_LIBS) $(OSX_OUT) $(OSX_OPT) 
+
+clean:
+	rm bin/build_osx

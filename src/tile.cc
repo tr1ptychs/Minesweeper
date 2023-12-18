@@ -7,6 +7,7 @@ Tile::Tile(int xCoordinate, int yCoordinate, bool hasBomb) : xCoordinate(xCoordi
         yCoordinate(yCoordinate), hasBomb(hasBomb){
     this->isRevealed = false;
     this->hasFlag = false;
+    this->isWhite = false;
 };
 
 // destructor
@@ -63,6 +64,6 @@ Color Tile::getColor() { return this->color; }
 
 bool Tile::tileIsWhite() { return this->isWhite; }
 
-bool Tile::tileIsRevealed() { return this-> isRevealed; }
+bool Tile::tileIsRevealed() { return this->isRevealed; }
 
-
+bool Tile::tileHasFlag() { return this->hasFlag; }

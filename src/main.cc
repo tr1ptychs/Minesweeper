@@ -28,20 +28,21 @@ void updateFrame(Minefield* field){
     BeginDrawing();
     ClearBackground(BLACK);
 
+    int x = floor(GetMouseX() / 25);
+    int y = floor(GetMouseY() / 25);
+
     // reveal and flag
     if (!field->checkLose() && !field->checkWin()) {
-        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-            field->click(GetMouseX(), GetMouseY());
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) || IsKeyReleased(KEY_Q)) {
+            field->click(x, y);
+        } 
+        if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT) || IsKeyReleased(KEY_W)) {
+            field->flag(x, y);
         }
-        if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
-            field->flag(GetMouseX(), GetMouseY());
+        if (IsMouseButtonReleased(MOUSE_BUTTON_MIDDLE)) {
+            field->chord(x, y);
         }
-        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-            field->chord(GetMouseX(), GetMouseY());
-        }
-    } else if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-        field->reinit();
-    }
+    } else if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT) || IsKeyReleased(KEY_Q)) field->reinit();
     
     // new game/change game
     if (IsKeyReleased(KEY_ONE)) {

@@ -47,12 +47,13 @@ class Tile {
         // return if the tile is revealed
         bool tileIsRevealed();
     
-        bool hasFlag;
+        bool tileHasFlag();
     private:
         const bool hasBomb;
         bool isRevealed;
         bool isHoverClicked;
         bool isWhite;
+        bool hasFlag;
         int number;
         Color color;
         const int xCoordinate;
